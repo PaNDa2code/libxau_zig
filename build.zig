@@ -35,5 +35,17 @@ pub fn build(b: *std.Build) !void {
         },
     });
 
+    {
+        const headers: []const []const u8 = &.{
+            "X11/Xauth.h",
+        };
+
+        for (headers) |header| {
+            const install_file = b.addInstallFileWithDir(libxauSource.path(b.pathJoin(&.{ "include", header })), .header, header);
+            b.getInstallStep().dependOn(&install_file.step);
+            libxau.installed_headers.append(&install_file.step) catch @panic("OOM");
+        }
+    }
+
     b.installArtifact(libxau);
 }
