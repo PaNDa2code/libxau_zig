@@ -1,9 +1,11 @@
 const std = @import("std");
 
+const LinkMode = if (@hasField(std.builtin.LinkMode, "static")) std.builtin.LinkMode else std.Build.Step.Compile.Linkage;
+
 pub fn build(b: *std.Build) !void {
     const target = b.standardTargetOptions(.{});
     const optimize = b.standardOptimizeOption(.{});
-    const linkage = b.option(std.builtin.LinkMode, "linkage", "whether to statically or dynamically link the library") orelse .static;
+    const linkage = b.option(LinkMode, "linkage", "whether to statically or dynamically link the library") orelse @as(LinkMode, if (target.result.isGnuLibC()) .dynamic else .static);
 
     const libxauSource = b.dependency("libxau", .{});
     const xorgprotoSource = b.dependency("xorgproto", .{});
