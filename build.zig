@@ -3,7 +3,7 @@ const std = @import("std");
 pub fn build(b: *std.Build) !void {
     const target = b.standardTargetOptions(.{});
     const optimize = b.standardOptimizeOption(.{});
-    const linkage = b.option(std.Build.Step.Compile.Linkage, "linkage", "whether to statically or dynamically link the library") orelse .static;
+    const linkage = b.option(std.builtin.LinkMode, "linkage", "whether to statically or dynamically link the library") orelse .static;
 
     const libxauSource = b.dependency("libxau", .{});
     const xorgprotoSource = b.dependency("xorgproto", .{});
@@ -23,15 +23,16 @@ pub fn build(b: *std.Build) !void {
     libxau.addIncludePath(xorgprotoSource.path("include"));
 
     libxau.addCSourceFiles(.{
+        .root = libxauSource.path("."),
         .files = &.{
-            libxauSource.path("AuDispose.c").getPath(libxauSource.builder),
-            libxauSource.path("AuFileName.c").getPath(libxauSource.builder),
-            libxauSource.path("AuGetAddr.c").getPath(libxauSource.builder),
-            libxauSource.path("AuGetBest.c").getPath(libxauSource.builder),
-            libxauSource.path("AuLock.c").getPath(libxauSource.builder),
-            libxauSource.path("AuRead.c").getPath(libxauSource.builder),
-            libxauSource.path("AuUnlock.c").getPath(libxauSource.builder),
-            libxauSource.path("AuWrite.c").getPath(libxauSource.builder),
+            "AuDispose.c",
+            "AuFileName.c",
+            "AuGetAddr.c",
+            "AuGetBest.c",
+            "AuLock.c",
+            "AuRead.c",
+            "AuUnlock.c",
+            "AuWrite.c",
         },
     });
 
