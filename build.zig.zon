@@ -1,15 +1,16 @@
 .{
-  .name = .libxau,
-  .version = "1.0.11",
-  .paths = .{""},
-  .dependencies = .{
-    .libxau = .{
-      .url = "https://gitlab.freedesktop.org/xorg/lib/libxau/-/archive/libXau-1.0.11/libxau-libXau-1.0.11.tar.gz",
-      .hash = "12200821a53a0d49e04beeaed436841068c1be9e269590ded12d1b5bd1550e8bbbc9",
+    .name = .libxau,
+    .fingerprint = 0xcd92a28b7c779891,
+    .version = "1.0.11",
+    .paths = .{""},
+    .dependencies = .{
+        .libxau = .{
+            .url = "https://gitlab.freedesktop.org/xorg/lib/libxau/-/archive/libXau-1.0.11/libxau-libXau-1.0.11.tar.gz",
+            .hash = "12200821a53a0d49e04beeaed436841068c1be9e269590ded12d1b5bd1550e8bbbc9",
+        },
+        .xorgproto = .{
+            .url = "https://gitlab.freedesktop.org/xorg/proto/xorgproto/-/archive/xorgproto-2023.2/xorgproto-xorgproto-2023.2.tar.gz",
+            .hash = "1220554cf93c82b980e9c6fb19819ecb29f7b0614866c70b1704e4d9adfc0e2dbdea",
+        },
     },
-    .xorgproto = .{
-      .url = "https://gitlab.freedesktop.org/xorg/proto/xorgproto/-/archive/xorgproto-2023.2/xorgproto-xorgproto-2023.2.tar.gz",
-      .hash = "1220554cf93c82b980e9c6fb19819ecb29f7b0614866c70b1704e4d9adfc0e2dbdea",
-    },
-  },
 }

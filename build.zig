@@ -10,17 +10,18 @@ pub fn build(b: *std.Build) !void {
     const libxauSource = b.dependency("libxau", .{});
     const xorgprotoSource = b.dependency("xorgproto", .{});
 
-    const libxau = std.Build.Step.Compile.create(b, .{
+    const libxau_mod = b.createModule(.{
+        .target = target,
+        .optimize = optimize,
+    });
+
+    const libxau = b.addLibrary(.{
         .name = "Xau",
-        .root_module = .{
-            .target = target,
-            .optimize = optimize,
-            .link_libc = true,
-        },
-        .kind = .lib,
+        .root_module = libxau_mod,
         .linkage = linkage,
     });
 
+    libxau.linkLibC();
     libxau.addIncludePath(libxauSource.path("include"));
     libxau.addIncludePath(xorgprotoSource.path("include"));
 
@@ -39,15 +40,13 @@ pub fn build(b: *std.Build) !void {
     });
 
     {
-        const headers: []const []const u8 = &.{
-            "X11/Xauth.h",
-        };
+        const headers_install = b.addInstallDirectory(.{
+            .install_dir = .prefix,
+            .install_subdir = "include/X11",
+            .source_dir = libxauSource.path("include/X11"),
+        });
 
-        for (headers) |header| {
-            const install_file = b.addInstallFileWithDir(libxauSource.path(b.pathJoin(&.{ "include", header })), .header, header);
-            b.getInstallStep().dependOn(&install_file.step);
-            libxau.installed_headers.append(&install_file.step) catch @panic("OOM");
-        }
+        b.getInstallStep().dependOn(&headers_install.step);
     }
 
     b.installArtifact(libxau);
