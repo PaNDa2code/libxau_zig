@@ -7,8 +7,8 @@ pub fn build(b: *std.Build) !void {
     const optimize = b.standardOptimizeOption(.{});
     const linkage = b.option(LinkMode, "linkage", "whether to statically or dynamically link the library") orelse @as(LinkMode, if (target.result.isGnuLibC()) .dynamic else .static);
 
-    const libxauSource = b.dependency("libxau", .{});
-    const xorgprotoSource = b.dependency("xorgproto", .{});
+    const libxau_upstream = b.dependency("libxau", .{});
+    const xorgproto_upstream = b.dependency("xorgproto", .{});
 
     const libxau_mod = b.createModule(.{
         .target = target,
@@ -22,11 +22,11 @@ pub fn build(b: *std.Build) !void {
     });
 
     libxau.linkLibC();
-    libxau.addIncludePath(libxauSource.path("include"));
-    libxau.addIncludePath(xorgprotoSource.path("include"));
+    libxau.addIncludePath(libxau_upstream.path("include"));
+    libxau.addIncludePath(xorgproto_upstream.path("include"));
 
     libxau.addCSourceFiles(.{
-        .root = libxauSource.path("."),
+        .root = libxau_upstream.path("."),
         .files = &.{
             "AuDispose.c",
             "AuFileName.c",
@@ -39,15 +39,13 @@ pub fn build(b: *std.Build) !void {
         },
     });
 
-    {
-        const headers_install = b.addInstallDirectory(.{
-            .install_dir = .prefix,
-            .install_subdir = "include/X11",
-            .source_dir = libxauSource.path("include/X11"),
-        });
+    const headers_install = b.addInstallDirectory(.{
+        .install_dir = .prefix,
+        .install_subdir = "include/X11",
+        .source_dir = libxau_upstream.path("include/X11"),
+    });
 
-        b.getInstallStep().dependOn(&headers_install.step);
-    }
+    b.getInstallStep().dependOn(&headers_install.step);
 
     b.installArtifact(libxau);
 }
