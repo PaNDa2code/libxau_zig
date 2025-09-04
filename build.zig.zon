@@ -5,12 +5,12 @@
     .paths = .{""},
     .dependencies = .{
         .libxau = .{
-            .url = "https://gitlab.freedesktop.org/xorg/lib/libxau/-/archive/libXau-1.0.11/libxau-libXau-1.0.11.tar.gz",
-            .hash = "N-V-__8AAFXPAAAIIaU6DUngS-6u1DaEEGjBvp4mlZDe0S0b",
+            .url = "https://gitlab.freedesktop.org/xorg/lib/libxau/-/archive/libXau-1.0.12/libxau-libXau-1.0.12.tar.gz?ref_type=tags",
+            .hash = "N-V-__8AAGTlAABgkQ5gmw2C1xhypMB4PArGI_hNIFTXs3mQ",
         },
         .xorgproto = .{
-            .url = "https://gitlab.freedesktop.org/xorg/proto/xorgproto/-/archive/xorgproto-2023.2/xorgproto-xorgproto-2023.2.tar.gz",
-            .hash = "N-V-__8AAK2lZQBVTPk8grmA6cb7GYGeyyn3sGFIZscLFwTk",
+            .url = "https://gitlab.freedesktop.org/xorg/proto/xorgproto/-/archive/xorgproto-2024.1/xorgproto-xorgproto-2024.1.tar.gz?ref_type=tags",
+            .hash = "N-V-__8AAJkAZgCO0RI9CmCz9GB-r604Mcghuo2rp7BoteNP",
         },
     },
 }

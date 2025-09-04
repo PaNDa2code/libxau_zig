@@ -13,6 +13,7 @@ pub fn build(b: *std.Build) !void {
     const libxau_mod = b.createModule(.{
         .target = target,
         .optimize = optimize,
+        .link_libc = true,
     });
 
     const libxau = b.addLibrary(.{
@@ -21,11 +22,10 @@ pub fn build(b: *std.Build) !void {
         .linkage = linkage,
     });
 
-    libxau.linkLibC();
-    libxau.addIncludePath(libxau_upstream.path("include"));
-    libxau.addIncludePath(xorgproto_upstream.path("include"));
+    libxau.root_module.addIncludePath(libxau_upstream.path("include"));
+    libxau.root_module.addIncludePath(xorgproto_upstream.path("include"));
 
-    libxau.addCSourceFiles(.{
+    libxau.root_module.addCSourceFiles(.{
         .root = libxau_upstream.path("."),
         .files = &.{
             "AuDispose.c",
@@ -39,13 +39,11 @@ pub fn build(b: *std.Build) !void {
         },
     });
 
-    const headers_install = b.addInstallDirectory(.{
-        .install_dir = .prefix,
-        .install_subdir = "include/X11",
-        .source_dir = libxau_upstream.path("include/X11"),
-    });
-
-    b.getInstallStep().dependOn(&headers_install.step);
+    libxau.installHeadersDirectory(
+        libxau_upstream.path("include/X11"),
+        "X11",
+        .{},
+    );
 
     b.installArtifact(libxau);
 }
